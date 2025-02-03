@@ -17,7 +17,7 @@ class HealthLifestyle:
         
         self.inputs = []
         self.labels = []
-        text = [
+        fields = [
             "Input your age:",
             "Input your sleep duration (1-10):",
             "Input your quality of sleep (1-10):",
@@ -26,7 +26,7 @@ class HealthLifestyle:
             "Input your sleeping heart rate:"
         ]
 
-        for text in text:
+        for text in fields:
             label = tk.Label(self.root, text=text, font=("Arial", 12), bg="#f0f0f0")
             label.pack(pady=5)
             entry = tk.Entry(self.root, font=("Arial", 12))
