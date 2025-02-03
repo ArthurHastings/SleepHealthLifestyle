@@ -65,6 +65,11 @@ class HealthLifestyle:
 
             outcome_label = tk.Label(self.root, text=result_texts[disorder_type], font=("Arial", 18), bg="#f0f0f0")
             outcome_label.pack(pady=20)
+
+            image_paths = ["images/healthy.png", "images/sleep-apnea.png", "images/insomnia.png"]
+            self.result_image = tk.PhotoImage(file=image_paths[disorder_type])
+            self.image_label = tk.Label(self.root, image=self.result_image, bg="#f0f0f0")
+            self.image_label.pack(pady=20)
         
         except ValueError:
             messagebox.showerror("Input Error", "Please enter valid numeric values.")
