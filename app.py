@@ -1,105 +1,73 @@
 import tkinter as tk
 from tkinter import messagebox
-from PIL import Image, ImageTk
 from func import *
-class HealthLifestyle:
 
+class HealthLifestyle:
     def __init__(self, root):
         self.root = root
-        self.age = 0
-        self.sleep_duration = 0
-        self.quality_of_sleep = 0
-        self.physical_activity = 0
-        self.stress_level = 0
-        self.heart_rate = 0
-
+        self.root.title("Sleep Disorder Calculator")
+        self.root.geometry("500x600")  # Set a larger square window
+        self.root.configure(bg="#f0f0f0")
+        
         self.setup()
 
     def setup(self):
-        self.frame = tk.Frame(self.root, width=300, height=200)
-        self.frame.pack()
+        self.title = tk.Label(self.root, text="Sleep Disorder Calculator", font=("Arial", 22, "bold"), bg="#f0f0f0")
+        self.title.pack(pady=20)
         
-        self.title = tk.Label(self.root, text="Sleep Disorder Calculator", font=("Helvetica", 20))
-        self.title.pack(pady=50)
+        self.inputs = []
+        self.labels = []
+        text = [
+            "Input your age:",
+            "Input your sleep duration (1-10):",
+            "Input your quality of sleep (1-10):",
+            "Input your physical activity level (1-100):",
+            "Input your stress level (1-10):",
+            "Input your sleeping heart rate:"
+        ]
 
-        self.input1 = tk.Label(self.root, text = "Input your age:")
-        self.input1.pack(pady=20)
+        for text in text:
+            label = tk.Label(self.root, text=text, font=("Arial", 12), bg="#f0f0f0")
+            label.pack(pady=5)
+            entry = tk.Entry(self.root, font=("Arial", 12))
+            entry.pack(pady=5, ipadx=5, ipady=3)
+            self.labels.append(label)
+            self.inputs.append(entry)
 
-        self.age = tk.Entry(self.root)
-        self.age.pack()
+        self.start_button = tk.Button(self.root, text="Submit", font=("Arial", 14, "bold"), bg="#007BFF", fg="white", command=self.start)
+        self.start_button.pack(pady=20, ipadx=10, ipady=5)
 
-        self.input2 = tk.Label(self.root, text = "Input your sleep duration (1-10):")
-        self.input2.pack(pady=20)
-
-        self.sleep_duration = tk.Entry(self.root)
-        self.sleep_duration.pack()
-
-        self.input3 = tk.Label(self.root, text = "Input your quality of sleep (1-10):")
-        self.input3.pack(pady=20)
-
-        self.quality_of_sleep = tk.Entry(self.root)
-        self.quality_of_sleep.pack()
-
-        self.input4 = tk.Label(self.root, text = "Input your physical activity level (1-100):")
-        self.input4.pack(pady=20)
-
-        self.physical_activity = tk.Entry(self.root)
-        self.physical_activity.pack()
-
-        self.input5 = tk.Label(self.root, text = "Input your stress level (1-10):")
-        self.input5.pack(pady=20)
-
-        self.stress_level = tk.Entry(self.root)
-        self.stress_level.pack()
-
-        self.input6 = tk.Label(self.root, text = "Input your sleeping heart rate:")
-        self.input6.pack(pady=20)
-
-        self.heart_rate = tk.Entry(self.root)
-        self.heart_rate.pack()
-
-        self.start_button = tk.Button(self.root, text="Submit!", command=self.start)
-        self.start_button.pack()
-    
     def start(self):
-        age_val = int(self.age.get().strip())  # Remove accidental spaces
-        sleep_val = float(self.sleep_duration.get().strip())
-        quality_val = int(self.quality_of_sleep.get().strip())
-        physical_score_val = int(self.physical_activity.get().strip())
-        stress_lvl_val = int(self.stress_level.get().strip())
-        heart_rate_val = int(self.heart_rate.get().strip())
+        try:
+            values = []
+            for i in range(6):
+                value = self.inputs[i].get().strip()
+                values.append(float(value))
 
+            disorder_type = calculateHealth(values[0], values[1], values[2], values[3], values[4], values[5])
 
-        self.title.pack_forget()
-        self.age.pack_forget()
-        self.input1.pack_forget()
-        self.sleep_duration.pack_forget()
-        self.input2.pack_forget()
-        self.quality_of_sleep.pack_forget()
-        self.input3.pack_forget()
-        self.physical_activity.pack_forget()
-        self.input4.pack_forget()
-        self.stress_level.pack_forget()
-        self.input5.pack_forget()
-        self.heart_rate.pack_forget()
-        self.input6.pack_forget()
-        self.start_button.pack_forget()
+            result_texts = [
+                "🟢 Low probability of having a sleep disorder.",
+                "🔴 High probability of having Sleep Apnea.",
+                "🔴 High probability of having Insomnia."
+            ]
 
-        self.disorder_type = calculateHealth(age_val, sleep_val, quality_val, physical_score_val, stress_lvl_val, heart_rate_val)
+            self.title.pack_forget()
+            for input in self.inputs:
+                input.pack_forget()
+            
+            for label in self.labels:
+                label.pack_forget()
+            self.start_button.pack_forget()
 
-        self.msg = tk.Label(self.root, text="The results are in:", font=("Helvetica", 20))
-        self.msg.pack(pady=50)
+            result_label = tk.Label(self.root, text="The results are in:", font=("Arial", 20, "bold"), bg="#f0f0f0")
+            result_label.pack(pady=20)
 
-        if self.disorder_type == 0:
-            self.result1 = tk.Label(self.root, text="🟢 Low probability of having a sleep disorder.", font=("Helvetica", 20))
-            self.result1.pack(pady=50)
-        elif self.disorder_type == 1:
-            self.result1 = tk.Label(self.root, text="🔴 High probability of having Sleep Apnea.", font=("Helvetica", 20))
-            self.result1.pack(pady=50)
-        elif self.disorder_type == 2:
-            self.result1 = tk.Label(self.root, text="🔴 High probability of having Insomnia.", font=("Helvetica", 20))
-            self.result1.pack(pady=50)
-
+            outcome_label = tk.Label(self.root, text=result_texts[disorder_type], font=("Arial", 18), bg="#f0f0f0")
+            outcome_label.pack(pady=20)
+        
+        except ValueError:
+            messagebox.showerror("Input Error", "Please enter valid numeric values.")
 
 if __name__ == "__main__":
     root = tk.Tk()
