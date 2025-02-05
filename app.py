@@ -7,7 +7,7 @@ class HealthLifestyle:
     def __init__(self, root):
         self.root = root
         self.root.title("Sleep Disorder Calculator")
-        self.root.geometry("500x600")  # Set a larger square window
+        self.root.geometry("500x700")
         self.root.configure(bg="#f0f0f0")
         
         self.intro()
@@ -26,31 +26,43 @@ class HealthLifestyle:
         self.model_select = tk.Entry(self.root, font=("Arial", 12))
         self.model_select.pack(pady=5, ipadx=5, ipady=3)
 
-        self.select_model_button = tk.Button(self.root, text="Confirm", font=("Arial", 14, "bold"), bg="#007BFF", fg="white", command=self.start)
+        self.select_model_button = tk.Button(self.root, text="Confirm", font=("Arial", 14, "bold"), bg="#007BFF", fg="white", command=self.setup)
         self.select_model_button.pack(pady=20, ipadx=10, ipady=5)
 
     def setup(self):
 
-        self.title_1.pack_forget
-        self.choose_model.pack_forget
-        self.model_select.pack_forget
-        self.select_model_button.pack_forget
+        self.title_1.pack_forget()
+        self.choose_model.pack_forget()
+        self.model_select.pack_forget()
+        self.select_model_button.pack_forget()
 
         self.title_2 = tk.Label(self.root, text="Sleep Disorder Calculator", font=("Arial", 22, "bold"), bg="#f0f0f0")
         self.title_2.pack(pady=20)
         
+        model = int(self.model_select.get().strip())
+
         self.inputs = []
         self.labels = []
-        fields = [
+        fields = [[
             "Input your age:",
             "Input your sleep duration (1-10):",
             "Input your quality of sleep (1-10):",
             "Input your physical activity level (1-100):",
             "Input your stress level (1-10):",
             "Input your sleeping heart rate:"
+            ],
+            [
+            "Input your age:",
+            "Input your sleep duration (1-10):",
+            "Input your quality of sleep (1-10):",
+            "Input your physical activity level (1-100):",
+            "Input your stress level (1-10):",
+            "Input your sleeping heart rate:",
+            "Input your daily steps (0-10000):"
+            ]
         ]
-
-        for text in fields:
+        
+        for text in fields[model-1]:
             label = tk.Label(self.root, text=text, font=("Arial", 12), bg="#f0f0f0")
             label.pack(pady=5)
             entry = tk.Entry(self.root, font=("Arial", 12))
@@ -63,13 +75,13 @@ class HealthLifestyle:
 
     def start(self):
         try:
-            model = int(self.model_select.get().strip())
             values = []
             for i in range(6):
                 value = self.inputs[i].get().strip()
                 values.append(float(value))
-
-            disorder_type = loadModel(model, values[0], values[1], values[2], values[3], values[4], values[5])
+            print("ZAZAAAAAAAAAAAAAAAA")
+            print(model, values)
+            disorder_type = loadModel(model, values)
 
             result_texts = [
                 "🟢 Low probability of having a sleep disorder.",
@@ -77,7 +89,7 @@ class HealthLifestyle:
                 "🔴 High probability of having Insomnia."
             ]
 
-            self.title.pack_forget()
+            self.title_2.pack_forget()
             for input in self.inputs:
                 input.pack_forget()
             
