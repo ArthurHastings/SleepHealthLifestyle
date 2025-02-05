@@ -1,3 +1,4 @@
+from pyexpat import model
 import tkinter as tk
 from tkinter import messagebox
 from func import *
@@ -9,11 +10,34 @@ class HealthLifestyle:
         self.root.geometry("500x600")  # Set a larger square window
         self.root.configure(bg="#f0f0f0")
         
-        self.setup()
+        self.intro()
+
+    def intro(self):
+        self.title_1 = tk.Label(self.root, text="Sleep Disorder Calculator", font=("Arial", 22, "bold"), bg="#f0f0f0")
+        self.title_1.pack(pady=20)
+
+        self.choose_model = tk.Label(
+            self.root,
+            text="Choose what model you want to use: \n1. Linear regession model\n2. Logistic regression model",
+            font=("Arial", 12),
+            bg="#f0f0f0")
+        self.choose_model.pack(pady=20)
+
+        self.model_select = tk.Entry(self.root, font=("Arial", 12))
+        self.model_select.pack(pady=5, ipadx=5, ipady=3)
+
+        self.select_model_button = tk.Button(self.root, text="Confirm", font=("Arial", 14, "bold"), bg="#007BFF", fg="white", command=self.start)
+        self.select_model_button.pack(pady=20, ipadx=10, ipady=5)
 
     def setup(self):
-        self.title = tk.Label(self.root, text="Sleep Disorder Calculator", font=("Arial", 22, "bold"), bg="#f0f0f0")
-        self.title.pack(pady=20)
+
+        self.title_1.pack_forget
+        self.choose_model.pack_forget
+        self.model_select.pack_forget
+        self.select_model_button.pack_forget
+
+        self.title_2 = tk.Label(self.root, text="Sleep Disorder Calculator", font=("Arial", 22, "bold"), bg="#f0f0f0")
+        self.title_2.pack(pady=20)
         
         self.inputs = []
         self.labels = []
@@ -39,12 +63,13 @@ class HealthLifestyle:
 
     def start(self):
         try:
+            model = int(self.model_select.get().strip())
             values = []
             for i in range(6):
                 value = self.inputs[i].get().strip()
                 values.append(float(value))
 
-            disorder_type = calculateHealth(values[0], values[1], values[2], values[3], values[4], values[5])
+            disorder_type = loadModel(model, values[0], values[1], values[2], values[3], values[4], values[5])
 
             result_texts = [
                 "🟢 Low probability of having a sleep disorder.",
